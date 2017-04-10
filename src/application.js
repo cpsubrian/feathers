@@ -53,6 +53,7 @@ export default {
     if (this._isSetup && typeof protoService.setup === 'function') {
       debug(`Setting up service for \`${location}\``);
       protoService.setup(this, location);
+      this.emit('setup:service', protoService);
     }
 
     return (this.services[location] = protoService);
@@ -100,8 +101,11 @@ export default {
       if (typeof service.setup === 'function') {
         service.setup(this, path);
       }
+      
+      this.emit('setup:service', service);
     });
 
+    this.emit('setup');
     this._isSetup = true;
 
     return this;
